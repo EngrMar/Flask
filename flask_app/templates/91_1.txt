@@ -1,0 +1,32 @@
+    BusinessList_dict = {}
+    BS_name = []
+    BS_email = []
+    BS_contact_number = []
+    m = len(company_names_link)
+    n = 0
+    for company in company_names_link:
+        if n <= m:
+            response = requests.get(company[n])
+            web_page = response.text
+            soup = BeautifulSoup(web_page, "html.parser")
+            email = soup.find(name="li", id="listing-email")
+            if email == None:
+                BS_email.append("No Data Source")
+            else:
+                BS_email.append(email.a.get("href"))
+            contact_number = soup.find(name="a", class_="text-muted")
+            if contact_number == None:
+                BS_contact_number.append("No Data from Source")
+            else:
+                BS_contact_number.append(contact_number.getText())
+            name = soup.find(name="h1", class_="entry-title").getText()
+            BS_name.append(name)
+            BusinessList_dict[n] = {
+                "Name": BS_name[n],
+                "email": BS_email[n],
+                "contact_number": BS_contact_number[n]
+            }
+        n += 1
+        else:
+            break
+    BSulit_data = pd.DataFrame(BusinessList_dict).T

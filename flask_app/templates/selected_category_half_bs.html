@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Automation Machine - Web Scraper</title>
+  </head>
+  <body background="{{url_for('static', filename='61769.jpg')}}">
+      <img src="{{url_for('static', filename='machine.png')}}"/>
+      <br>
+      <h1>Business Sulit PH Web Scraper</h1>
+      <p>This is a web scraper for Business Sulit PH Business Directory Web Page.</p>
+      <p>Please click the link below, to download the csv file, containing the scraped data</p>
+        <div>
+          <h3><a href={{ url_for('csv_download', file_todl=file_for_dl) }}>Download CSV</a></h3>
+        </div>
+      <hr noshade>
+  </body>
+</html>

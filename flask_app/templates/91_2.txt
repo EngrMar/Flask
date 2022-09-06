@@ -1,0 +1,79 @@
+# link = "https://www.businesslist.ph/category/general-business/3"
+# new = link.rsplit('/', 1)[0] + "/"
+
+# list_sample = []
+# for n in range(4, 607):
+#    list_sample.append(new + str(n))
+# print(list_sample)
+
+from flask import Flask, render_template
+from flask_restful import Api, Resource
+from selenium import webdriver
+from selenium.webdriver import Keys, ActionChains
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+from selenium.webdriver.common.keys import Keys
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
+import range
+from flask import request
+from urllib.parse import urljoin
+
+path = Service(r"C:\Users\marion.deguzman\PycharmProjects\chromedriver")
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(service=path, options=options)
+
+## Login
+driver.get("https://business.sulit.ph/")
+email_login = driver.find_element(By.LINK_TEXT, "Login")
+email_login.click()
+
+email_login_username = driver.find_elements(By.XPATH, '//input[@class="required"]')[0]
+email_login_username.send_keys("marion.deguzman")
+password_login = driver.find_elements(By.XPATH, '//input[@class="required"]')[1]
+password_login.send_keys("HirayaManawari0829")
+sign_in_submit = driver.find_element(By.XPATH, '//input[@type="submit"]')
+sign_in_submit.click()
+
+##############################################################
+page_parsed = driver.page_source
+soup = BeautifulSoup(page_parsed, "html.parser")
+
+Business_Categories_Links = []
+Business_Categories_NotLinks = []
+business_categories = soup.find_all(name="div", class_="parent-cat-wrap column column-block")
+for business_cat in business_categories:
+    # if int(business_categories[r]) >= 1:
+    link = business_cat.a.get("href")
+    # not_link = business_categories[r].div
+    Business_Categories_Links.append(link)
+    # Business_Categories_NotLinks.append(not_link)
+
+print(Business_Categories_Links)
+
+Business_Category = Business_Categories_Links[0]
+driver.get(Business_Category)
+time.sleep(10)
+Business_Page_Links = []
+Business_Page_Links.append(Business_Category)
+
+
+while True:
+    try:
+        next_page_element = driver.find_element(By.XPATH, '//a[@class="next page-numbers"]')
+        next_page_url = next_page_element.get_attribute("href")
+        driver.get(next_page_url)
+        Business_Page_Links.append(driver.current_url)
+    except NoSuchElementException:
+        break
+
+print(Business_Page_Links)
+
+
+, numberofpages=number_of_pages, business_names_html=company_names_link, data=BSulit_data
